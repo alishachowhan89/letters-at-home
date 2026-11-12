@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { ANSWERS, isAcceptedGuess } from '../words'
+import { ANSWERS, DEFINITIONS, isAcceptedGuess } from '../words'
 
 describe('answer list', () => {
   it('contains only five-letter uppercase words (a sixth letter would break the board)', () => {
@@ -18,6 +18,17 @@ describe('answer list', () => {
     // not under ~100 words ("a daily puzzle repeats within one semester"). If this
     // fails, the decision's falsifier fired: reopen the question, don't just lower the bar.
     expect(ANSWERS.length).toBeGreaterThanOrEqual(100)
+  })
+
+  it('has a definition for every answer, so the end-of-game reveal is never blank', () => {
+    // Appending a word to answers.ts without defining it is the easy mistake.
+    const undefinedWords = ANSWERS.filter((w) => !DEFINITIONS[w]?.trim())
+    expect(undefinedWords).toEqual([])
+  })
+
+  it('has no definitions for words that are not answers (a typo in a key hides a missing one)', () => {
+    const orphans = Object.keys(DEFINITIONS).filter((w) => !ANSWERS.includes(w))
+    expect(orphans).toEqual([])
   })
 })
 

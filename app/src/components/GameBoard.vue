@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import BoardTile from './BoardTile.vue'
-import type { BoardRow } from '@/game/useDailyGame'
+import type { BoardRow } from '@/game/useWordGame'
 
 defineProps<{ rows: BoardRow[] }>()
 </script>

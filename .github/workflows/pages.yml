@@ -3,10 +3,11 @@
 # Every push to main runs the tests and the production build — a red X on a
 # commit means the gate failed in CI too.
 #
-# DEPLOY is manual for now (Actions tab → "pages" → Run workflow): QST-PRODUCT-NAME
-# was answered "rename the repo before the first deploy", and the name is not
-# chosen yet. After the rename, delete the `if:` on the deploy job so every
-# push to main publishes.
+# DEPLOY happens only once the repo is named `five-bytes`: QST-PRODUCT-NAME
+# was answered "rename the repo before the first deploy", and QST-GAME-NAME
+# chose Five Bytes (ADR-0002). Under the old name the job is skipped, so
+# nothing is ever published at /wordle-with-records/. After the rename, every
+# push to main (or a manual run) deploys.
 #
 # One-time repo setting: Settings → Pages → Build and deployment → Source: GitHub Actions.
 
@@ -51,7 +52,7 @@ jobs:
           path: app/dist
 
   deploy:
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event.repository.name == 'five-bytes'
     needs: build
     runs-on: ubuntu-latest
     environment:

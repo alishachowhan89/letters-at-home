@@ -13,3 +13,4 @@ export function isAcceptedGuess(word: string): boolean {
 }
 
 export { ANSWERS }
+export { DEFINITIONS } from './definitions'

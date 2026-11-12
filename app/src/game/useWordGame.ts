@@ -1,8 +1,7 @@
 import { computed, ref, shallowRef, watch } from 'vue'
-import { answerForDay, dayNumber } from './daily'
 import { MAX_GUESSES, WORD_LENGTH, scoreGuess, type LetterState } from './feedback'
-import { keyboardStates, restoreGame, submitGuess, type RejectReason } from './game'
-import { isAcceptedGuess } from './words'
+import { keyboardStates, restoreGame, submitGuess, type GameState, type RejectReason } from './game'
+import { DEFINITIONS, isAcceptedGuess } from './words'
 
 export interface BoardRow {
   letters: string[]
@@ -16,7 +15,7 @@ const REJECT_MESSAGES: Record<RejectReason, string> = {
 }
 
 // localStorage can throw (private mode, blocked storage) — the game must still
-// work, it just won't remember today's progress.
+// work, it just won't remember progress.
 function load(key: string): string[] {
   try {
     const raw = localStorage.getItem(key)
@@ -35,19 +34,26 @@ function save(key: string, guesses: readonly string[]): void {
   }
 }
 
-/**
- * Daily mode (QST-PUZZLE-CADENCE = C, daily first). Today's guesses are saved per
- * day number, so reloading the page restores the board instead of offering a replay.
- * Practice mode will reuse the same core with a random answer and no saving.
- */
-export function useDailyGame(now: Date = new Date()) {
-  const day = dayNumber(now)
-  const storageKey = `cs-word-guess:daily:${day}`
-  const state = shallowRef(restoreGame(answerForDay(day), load(storageKey), isAcceptedGuess))
-  const current = ref('')
-  const message = ref('')
+function endMessage(s: GameState): string {
+  if (s.status === 'won') return `Solved in ${s.guesses.length}/${MAX_GUESSES}`
+  if (s.status === 'lost') return `The word was ${s.answer}`
+  return ''
+}
 
-  watch(state, (s) => save(storageKey, s.guesses))
+/**
+ * One game round for a given answer. The rules live in ./game.ts; this only
+ * holds the current state reactively and turns key presses into moves.
+ *
+ * `storageKey` set (daily mode): guesses are saved, so a reload restores the
+ * board instead of allowing a replay. `null` (practice mode): nothing is saved.
+ */
+export function useWordGame(answer: string, storageKey: string | null) {
+  const saved = storageKey ? load(storageKey) : []
+  const state = shallowRef(restoreGame(answer, saved, isAcceptedGuess))
+  const current = ref('')
+  const message = ref(endMessage(state.value))
+
+  if (storageKey) watch(state, (s) => save(storageKey, s.guesses))
 
   function typeLetter(letter: string) {
     if (state.value.status !== 'playing' || current.value.length >= WORD_LENGTH) return
@@ -68,13 +74,12 @@ export function useDailyGame(now: Date = new Date()) {
     }
     state.value = r.state
     current.value = ''
-    if (r.state.status === 'won') message.value = `Solved in ${r.state.guesses.length}/${MAX_GUESSES}`
-    if (r.state.status === 'lost') message.value = `The word was ${r.state.answer}`
+    message.value = endMessage(r.state)
   }
 
   const rows = computed<BoardRow[]>(() => {
-    const { guesses, answer, status } = state.value
-    const out: BoardRow[] = guesses.map((g) => ({ letters: [...g], states: scoreGuess(g, answer) }))
+    const { guesses, status } = state.value
+    const out: BoardRow[] = guesses.map((g) => ({ letters: [...g], states: scoreGuess(g, state.value.answer) }))
     if (status === 'playing' && out.length < MAX_GUESSES) {
       out.push({ letters: [...current.value.padEnd(WORD_LENGTH, ' ')], states: null })
     }
@@ -84,9 +89,12 @@ export function useDailyGame(now: Date = new Date()) {
 
   const keyStates = computed(() => keyboardStates(state.value))
 
-  // On reload of a finished game, say how it ended.
-  if (state.value.status === 'won') message.value = `Solved in ${state.value.guesses.length}/${MAX_GUESSES}`
-  if (state.value.status === 'lost') message.value = `The word was ${state.value.answer}`
+  /** Shown only once the round is over — the reveal teaches the term (ADR-0001). */
+  const reveal = computed(() =>
+    state.value.status === 'playing'
+      ? null
+      : { word: state.value.answer, definition: DEFINITIONS[state.value.answer] ?? '' },
+  )
 
-  return { day, state, rows, keyStates, message, typeLetter, backspace, submit }
+  return { state, rows, keyStates, message, reveal, typeLetter, backspace, submit }
 }

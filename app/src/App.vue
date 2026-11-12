@@ -1,48 +1,53 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted } from 'vue'
-import GameBoard from './components/GameBoard.vue'
-import OnScreenKeyboard from './components/OnScreenKeyboard.vue'
-import { useDailyGame } from './game/useDailyGame'
+import { KeepAlive, ref } from 'vue'
+import GamePanel from './components/GamePanel.vue'
+import { answerForDay, dayNumber } from './game/daily'
+import { pickPracticeAnswer } from './game/practice'
+import { ANSWERS } from './game/words'
 
-// Working title. QST-PRODUCT-NAME was answered B (original name + repo rename),
-// but the name itself is still to be chosen — change it here and in index.html.
-const GAME_TITLE = 'CS Word Guess'
+// QST-GAME-NAME answered C (ADR-0002). Also in index.html's <title>.
+const GAME_TITLE = 'Five Bytes'
 
-const { day, rows, keyStates, message, typeLetter, backspace, submit } = useDailyGame()
+type Mode = 'daily' | 'practice'
+const mode = ref<Mode>('daily')
 
-function onKey(key: string) {
-  if (key === 'ENTER') submit()
-  else if (key === 'BACK') backspace()
-  else typeLetter(key)
+const day = dayNumber(new Date())
+const dailyAnswer = answerForDay(day)
+const dailyKey = `five-bytes:daily:${day}`
+
+// Practice: random answer, never today's daily word, never the one just played.
+const practiceAnswer = ref(pickPracticeAnswer(ANSWERS, [dailyAnswer]))
+const practiceRound = ref(0)
+
+function newPracticeWord() {
+  practiceAnswer.value = pickPracticeAnswer(ANSWERS, [dailyAnswer, practiceAnswer.value])
+  practiceRound.value++
 }
-
-function onPhysicalKey(e: KeyboardEvent) {
-  if (e.ctrlKey || e.metaKey || e.altKey) return
-  // Let a focused on-screen key handle Enter itself (otherwise Enter would both
-  // "click" the focused button and submit).
-  if (e.key === 'Enter' && document.activeElement instanceof HTMLButtonElement) return
-  if (e.key === 'Enter') onKey('ENTER')
-  else if (e.key === 'Backspace') onKey('BACK')
-  else if (/^[a-zA-Z]$/.test(e.key)) onKey(e.key.toUpperCase())
-  else return
-  e.preventDefault()
-}
-
-onMounted(() => window.addEventListener('keydown', onPhysicalKey))
-onBeforeUnmount(() => window.removeEventListener('keydown', onPhysicalKey))
 </script>
 
 <template>
   <div class="app">
     <header class="header">
       <h1 class="title"><span class="prompt">&gt;</span> {{ GAME_TITLE }}</h1>
-      <p class="subtitle">daily #{{ day + 1 }} · every answer is a CS term</p>
+      <p class="subtitle">every answer is a CS term</p>
+      <div class="modes" role="group" aria-label="Game mode">
+        <button type="button" class="mode" :aria-pressed="mode === 'daily'" @click="mode = 'daily'">
+          daily #{{ day + 1 }}
+        </button>
+        <button type="button" class="mode" :aria-pressed="mode === 'practice'" @click="mode = 'practice'">
+          practice
+        </button>
+        <button v-if="mode === 'practice'" type="button" class="mode new" @click="newPracticeWord">
+          new word ↻
+        </button>
+      </div>
     </header>
 
     <main class="main">
-      <GameBoard :rows="rows" />
-      <p class="message" role="status" aria-live="polite">{{ message }}</p>
-      <OnScreenKeyboard :states="keyStates" @key="onKey" />
+      <KeepAlive>
+        <GamePanel v-if="mode === 'daily'" key="daily" :answer="dailyAnswer" :storage-key="dailyKey" />
+        <GamePanel v-else :key="`practice-${practiceRound}`" :answer="practiceAnswer" :storage-key="null" />
+      </KeepAlive>
     </main>
   </div>
 </template>
@@ -71,18 +76,38 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onPhysicalKey))
   font-size: 0.8rem;
   color: var(--muted);
 }
+.modes {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.mode {
+  padding: 4px 10px;
+  font: inherit;
+  font-size: 0.8rem;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+.mode[aria-pressed='true'] {
+  color: var(--text);
+  border-color: var(--correct);
+}
+.mode.new {
+  color: var(--accent);
+}
+.mode:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
 .main {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: 16px;
   padding-top: 20px;
-}
-.message {
-  min-height: 1.5em;
-  text-align: center;
-  font-size: 0.95rem;
-  color: var(--accent);
 }
 </style>
