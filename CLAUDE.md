@@ -1,19 +1,9 @@
 # CLAUDE.md - Project Guidance
 
-> **Instantiating this template?** Placeholders look like ⟦THIS⟧ — fill-and-delete
-> each one (grep-proof on purpose; `just instantiate-check` reports which remain
-> and passes only when none do). Square-bracket text elsewhere is either a
-> per-document mold slot (filled at each mint, not at birth) or the frozen
-> dialogue placeholder `[Fill this in]` — never convert those. *(This note is
-> visible text, not an HTML comment, because the harness strips block comments
-> from the CLAUDE.md it serves at session start — a cold instantiator proved the
-> instructions were sitting exactly where their audience could not see them.
-> Delete this block when instantiation is done.)*
-
-- **Project**: ⟦PROJECT-NAME⟧
-- **Human**: ⟦HUMANS⟧
-- **AI**: ⟦AI-SEATS⟧ <!-- with the crew layer, the roster lives in docs/inbox/agent-sessions.json; name the coordinator seat here -->
-- **Last Updated**: ⟦LAST-UPDATED⟧
+- **Project**: wordle-with-records (repo name; the product's public title is still open, see ADR-0002 QST-PRODUCT-NAME)
+- **Human**: Alisha Chowhan
+- **AI**: Lexeme 5.5 (Claude Opus 5.5, Claude Code), the only AI seat and its coordinator. No crew registry entries yet; add them to docs/inbox/agent-sessions.json if more seats join.
+- **Last Updated**: 2026-11-12
 
 ---
 
@@ -98,15 +88,15 @@ Tests should:
 **RUN THIS PROJECT'S VERIFICATION GATE BEFORE EVERY COMMIT**
 
 Before serving any change:
-1. Run the project's verification gate: ⟦VERIFICATION-GATE⟧ <!-- test suite, build, linter, or a combination; e.g. `npm test`, `uv run pytest`, `hugo && bin/check` -->
+1. Run the project's verification gate: `just gate`
 2. Fix any failures before committing
 3. Never serve changes with a failing gate
 
-**Why**: ⟦GATE-WHY⟧ <!-- state what this project's gate actually catches — real classes of bug, real numbers if you have them. A directive that names a real gate gets followed; an unfollowable one teaches every seat that directives are decorative, and that lesson generalizes. -->
+**Why**: There is no code yet, so today `just gate` checks only two things: that instantiation is complete (no leftover template placeholders or fixture files) and that the crew registry parses. When the Vue app is scaffolded (ADR-0002), the gate's project slot in the `justfile` gets `npm test` and `npm run build`. `npm test` (Vitest) covers the feedback-coloring logic, especially repeated letters: when an answer has one E and the guess has two, only one E may be marked. `npm run build` catches template and compile errors, and a wrong Vite `base` path, before anything reaches GitHub Pages. Extending the gate is an action item in ADR-0002, not optional.
 
 **Process**:
 ```bash
-⟦VERIFICATION-GATE⟧            # Must be green before commit
+just gate                      # Must be green before commit
 git add <explicit paths>       # never -A: stage by path, commit by pathspec — see CONVENTIONS.md, shared-worktree awareness
 git commit -m "..." -- <paths>
 ```
@@ -256,10 +246,10 @@ If the script was successfully used, append as comments how, and what the outcom
 ## Project Context
 
 ### What we're building:
-⟦PROJECT-GOAL⟧ <!-- 1-3 sentences; same token as ONBOARDING's — one text serves both -->
+A browser word-guessing game: you guess a hidden five-letter word and get colored feedback for each letter. The twist is that every answer is a computer-science term (ARRAY, STACK, QUEUE, CACHE, TOKEN…). It's built with Vue single-file components using scoped CSS, so styles stay inside each component, and it's hosted free as a static site on GitHub Pages. This repo holds both the game and its decision records; implementation happens here.
 
 ### Current focus:
-⟦CURRENT-FOCUS⟧
+Settling the decisions that come before any code: game rules (ADR-0001) and toolchain and deploy (ADR-0002). Scaffolding starts once their questions are answered.
 
 ### Key decisions made:
 *(List ADRs here as they land, e.g. `- Auth approach — see docs/adr/0001-*.md`. Empty at birth is healthy.)*
