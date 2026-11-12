@@ -45,7 +45,7 @@ Chosen: **Letters at Home** and **a curated everyday list, CS dropped**, because
 
 * **The definitions on the reveal are removed** (`definitions.ts` deleted). They taught CS terms; everyday words don't need them. ADR-0001's "the reveal teaches the term" no longer applies.
 * The project's founding premise (CLAUDE.md, ONBOARDING) is gone; both are updated.
-* **The title no longer matches the repo or URL** (`five-bytes`). See the open question below.
+* **The title no longer matched the repo or URL** (`five-bytes`). Resolved by QST-REPO-NAME = B (see Follow-through).
 * The palette's "editor at night" look (teal, amber, `>` prompt) was designed for the CS theme. It still works, but it's now a styling choice rather than a reference to the theme.
 
 ## Open question
@@ -67,6 +67,14 @@ Options:
 B — Rename to letters-at-home. Rationale: QST-PRODUCT-NAME's reasoning still holds: the URL is the most-shared part of a Pages site, and renaming only gets more expensive. Right now the cost is close to zero, since the site went live today. The workflow edit is one line. Confidence: 0.6 — because the reasoning is solid, but I don't know whether you've already shared the five-bytes link. If wrong: if you've already sent alishachowhan89.github.io/five-bytes/ to people, or you like the URL as an inside joke, keep it (A).
 
 ---
+
+## Follow-through (2026-11-12)
+
+QST-REPO-NAME answered B, carried out by Lexeme 5.5:
+* Repo renamed `alishachowhan89/five-bytes` → `alishachowhan89/letters-at-home`. Pages followed automatically (`build_type: workflow`). Local `origin` updated.
+* `.github/workflows/pages.yml`: the deploy check now requires `letters-at-home`, with a warning comment that any future rename must update it too.
+* Storage prefix changed to `letters-at-home:daily:<day>:<answer>`. This cost nothing, since no player had saved anything under the new list yet.
+* Workflow run 43323215844 (commit `8c757f7`): build and deploy succeeded. Verified live: https://alishachowhan89.github.io/letters-at-home/ returns 200 with `<title>Letters at Home</title>`, both assets return 200, the bundle's answer list starts PRINT, ROBIN, DOZEN, and no CS answers like MUTEX remain. The old `/five-bytes/` URL returns 404, as QST-REPO-NAME expected.
 
 ## Links
 

@@ -12,7 +12,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 - **Iteration**: 5
 - **Status**: Implemented
 
-> **Amended by [ADR-0003](0003-everyday-word-answers-and-the-letters-at-home-title.md) (2026-11-12):** the title is now **Letters at Home**, replacing Five Bytes. The repo and URL are still `five-bytes`; whether to rename is ADR-0003's QST-REPO-NAME.
+> **Amended by [ADR-0003](0003-everyday-word-answers-and-the-letters-at-home-title.md) (2026-11-12):** the title is now **Letters at Home**, replacing Five Bytes. The repo and URL were renamed to `letters-at-home` (ADR-0003 QST-REPO-NAME = B): https://alishachowhan89.github.io/letters-at-home/. The deploy check described below now requires `letters-at-home`.
 - **Deciders**: Alisha Chowhan (human), Lexeme 5.5 (Claude Opus 5.5)
 
 **TL;DR**: Scoped CSS means compiled Vue single-file components, so a build step is required. That leaves one open choice that affects every file, JavaScript or TypeScript, plus a deferred question about the product's public name to settle before the first deploy.

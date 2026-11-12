@@ -1,6 +1,6 @@
 # CLAUDE.md - Project Guidance
 
-- **Project**: Letters at Home (ADR-0003; formerly Five Bytes), live at https://alishachowhan89.github.io/five-bytes/ (repo `alishachowhan89/five-bytes`; local folder still `wordle-with-records`)
+- **Project**: Letters at Home (ADR-0003; formerly Five Bytes), live at https://alishachowhan89.github.io/letters-at-home/ (repo `alishachowhan89/letters-at-home`; local folder still `wordle-with-records`)
 - **Human**: Alisha Chowhan
 - **AI**: Lexeme 5.5 (Claude Opus 5.5, Claude Code), the only AI seat and its coordinator. No crew registry entries yet; add them to docs/inbox/agent-sessions.json if more seats join.
 - **Last Updated**: 2026-11-12
@@ -249,7 +249,7 @@ If the script was successfully used, append as comments how, and what the outcom
 A browser word-guessing game: you guess a hidden five-letter everyday English word and get colored feedback for each letter, with a shared daily puzzle and unlimited practice. (Answers were originally computer-science terms; ADR-0003 switched to everyday words.) It's built with Vue single-file components using scoped CSS, so styles stay inside each component, and it's hosted free as a static site on GitHub Pages. This repo holds both the game and its decision records; implementation happens here.
 
 ### Current focus:
-**Letters at Home** is live with daily and practice modes and 593 everyday-word answers (ADR-0003). Every push to `main` deploys. Next: Alisha answers ADR-0003 QST-REPO-NAME (rename the URL?) and curates the answer list (append-only); then the debt in `docs/TECHNICAL-DEBT.md` (Node upgrade → component tests; kintsugi → a gate that can pass).
+**Letters at Home** is live with daily and practice modes and 593 everyday-word answers (ADR-0003). Every push to `main` deploys. Next: Alisha curates the answer list (append-only; ADR-0003); then the debt in `docs/TECHNICAL-DEBT.md` (Node upgrade → component tests; kintsugi → a gate that can pass).
 
 ### Key decisions made:
 - Answers and title: everyday English words (593, curated), title "Letters at Home"; "Wordle" name declined. See `docs/adr/0003-everyday-word-answers-and-the-letters-at-home-title.md`
