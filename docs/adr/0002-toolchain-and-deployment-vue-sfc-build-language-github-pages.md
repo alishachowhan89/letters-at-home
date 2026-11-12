@@ -9,8 +9,8 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Toolchain and deployment: Vue SFC build, language, GitHub Pages
 
 - **Date**: 2026-11-12
-- **Iteration**: 1
-- **Status**: Draft
+- **Iteration**: 2
+- **Status**: Partially Implemented
 - **Deciders**: Alisha Chowhan (human), Lexeme 5.5 (Claude Opus 5.5)
 
 **TL;DR**: Scoped CSS means compiled Vue single-file components, so a build step is required. That leaves one open choice that affects every file, JavaScript or TypeScript, plus a deferred question about the product's public name to settle before the first deploy.
@@ -68,7 +68,22 @@ B — Vite + Vue 3, TypeScript. Rationale: This project's bugs will mostly be lo
 
 ## Decision
 
-*Pending: filled in once QST-STACK is answered.*
+### Context
+Vue, scoped CSS and GitHub Pages were given in the brief. QST-STACK (answered B) and QST-PRODUCT-NAME (answered B) were settled by Alisha on 2026-11-12, accepting the recommendations.
+
+### Chosen
+- **Stack — B**: Vite + Vue 3 + TypeScript, scaffolded with `create-vue` 3.24.0 (`--ts --vitest`). The gate now includes Vitest, `vue-tsc` and `vite build`.
+- **Name — B**: an original name, with the repo renamed before the first deploy. **The name itself was not given**, so it's asked as QST-GAME-NAME below. Until then the page uses the working title "CS Word Guess".
+
+**Trade-offs accepted**: TypeScript syntax in every file. Deploy is held back until the rename.
+
+### Consequences
+- **The app lives in `app/`, not the repo root.** I chose this while implementing: the scaffolder's `README.md`, `.gitignore` and `.vscode/` would have collided with the template's, and the subfolder keeps the game separate from the records. CI and the gate both run with `app/` as their working directory.
+- **Base path comes from the repo name.** `vite.config.ts` reads `BASE_PATH`, and the workflow sets it to `/${{ github.event.repository.name }}/`. Renaming the repo therefore needs no code change, so B's "more work later" cost mostly disappears. Verified: a build with `BASE_PATH=/some-repo/` prefixes every asset and the favicon.
+- **The workflow (`.github/workflows/pages.yml`) tests and builds on every push, but deploys only when run by hand** until QST-GAME-NAME is answered and the repo renamed.
+- **The repo is public** (checked with `gh repo view`), so Pages is free. That resolves the open item below.
+- **Toolchain friction on this machine.** Node 22.14 is older than the scaffold needs (22.18+). npm 11.3.0 crashes while installing (`Cannot read properties of null (reading 'edgesOut')`, in arborist's peer-dependency code), so the install was done with npm 12.2.2 through npx. jsdom 30 won't load on Node 22.14, so tests run in the `node` environment. Details are in `docs/TECHNICAL-DEBT.md`. CI uses Node 24.
+- **Scoped CSS as planned**: one global `app/src/assets/tokens.css` (custom properties and a reset only); everything else is `<style scoped>`.
 
 ---
 
@@ -93,15 +108,39 @@ B — Original name, rename the repo. Rationale: The URL is the most-shared part
 
 ---
 
-- [ ] Unverified assumption: GitHub Pages is free for **public** repos on a free account. If this repo is private, Pages needs a paid plan. Confirm the repo's visibility before setting up deploy.
+### QST-GAME-NAME: What's the game's name? (QST-PRODUCT-NAME chose "original name + rename"; this picks the name)
+- Status: unanswered
+- Why asking: QST-PRODUCT-NAME was answered B: give the game an original name and rename the repo to match before the first deploy. The name itself wasn't given. The name appears in three places: the page title (`app/index.html`), the header (`GAME_TITLE` in `app/src/App.vue`), and the repo name, which becomes the URL `https://alishachowhan89.github.io/<name>/`. A short, lowercase-friendly name works best in that URL. Deploy is held back until this is answered.
+- Need: pick a letter, or write your own name (an answer in any shape is complete)
+
+Options:
+- **A — Lexer**: A lexer reads text and turns it into tokens, which is roughly what the player does with the letters. Five letters, like the answers. Drawback: on GitHub, a repo called `lexer` looks like a parsing library.
+- **B — Bytewise**: A CS pun on "wordwise". Clearly a game name, nothing to confuse it with, but it doesn't hint at word-guessing.
+- **C — Five Bytes**: Five letters, five bytes of ASCII. It describes the game, a little long as a URL (`five-bytes`).
+- **D — Your own name**: Anything original. Ideally it avoids the "-le" ending, which just points back to Wordle.
+
+**Recommendation**: (by Lexeme 5.5, Claude Opus 5.5, 2026-11-12)
+
+**C — Five Bytes.** *Rationale*: It says what the game is (five letters) in CS terms and can't be confused with a library, unlike A. B is a nice pun, but it says nothing about guessing a five-letter word. *Confidence*: 0.4 — because a name is taste, and the project is yours. My lean is only a starting point, so please pick. *If wrong*: if you want the name to carry the "every answer is a CS term" idea over the five-letter idea, choose **A** or your own (**D**).
+
+**ANS:** (by Alisha Chowhan)
+[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+
+---
+
+- [x] Unverified assumption: GitHub Pages is free for **public** repos on a free account. **Verified 2026-11-12**: `alishachowhan89/wordle-with-records` is public.
+- [ ] Concern: the `just gate` recipe stops at `instantiate-check`, which exits 2 because there's no `kintsugi.lock`. Until kintsugi is adopted, the gate never reaches the app tests. Fix: install kintsugi and run `kintsugi adopt` (Alisha's call; it's an interactive, file-by-file walkthrough).
+- [ ] Future task: upgrade local Node to 24 LTS (or ≥ 22.18). That clears the engine warnings and lets component tests use jsdom.
 
 ---
 
 ## Action Items
 
-- [ ] After QST-STACK is answered: scaffold with `npm create vue@latest`, add Vitest, extend `just gate` - Owner: Lexeme 5.5
-- [ ] Add the GitHub Actions Pages workflow; turn on Pages (Settings → Pages → Source: GitHub Actions) - Owner: Lexeme 5.5 (workflow), Alisha Chowhan (repo setting)
-- [ ] Answer QST-PRODUCT-NAME before the first deploy - Owner: Alisha Chowhan
+- [x] Scaffold with `npm create vue@latest` (TS + Vitest), extend `just gate` - Owner: Lexeme 5.5
+- [x] Add the GitHub Actions Pages workflow (deploy runs only when triggered by hand for now) - Owner: Lexeme 5.5
+- [ ] Turn on Pages: Settings → Pages → Source: GitHub Actions - Owner: Alisha Chowhan
+- [x] Answer QST-PRODUCT-NAME (B) - Owner: Alisha Chowhan
+- [ ] Answer QST-GAME-NAME, rename the repo on GitHub, update `GAME_TITLE` and `<title>`, then remove the `if:` on the deploy job - Owner: Alisha Chowhan (name, rename), Lexeme 5.5 (code)
 
 ---
 
@@ -122,6 +161,12 @@ B — Original name, rename the repo. Rationale: The URL is the most-shared part
 - Contributors: Lexeme 5.5 (Claude Opus 5.5)
 - Changes: Showed the brief already requires a build step. Asked the JS-or-TS question. Deferred the product-name question to the first deploy. Wrote down the scaffold, test, deploy and global-theme-values assumptions.
 - Outcome: Draft; waiting on Alisha's answers
+
+### Iteration 2 (2026-11-12)
+- Trigger: Alisha answered QST-STACK (B) and QST-PRODUCT-NAME (B), accepting the recommendations
+- Contributors: Alisha Chowhan (answers), Lexeme 5.5 (Claude Opus 5.5; implementation, this entry)
+- Changes: Scaffolded `app/` and wrote the Decision section. Recorded the `app/` subfolder and base-path-from-repo-name choices, and the local Node/npm/jsdom problems. Added the Pages workflow with deploy held back. Added QST-GAME-NAME because answer B asked for a name but didn't give one. Marked repo visibility as verified.
+- Outcome: Draft → Partially Implemented (deploy waits on QST-GAME-NAME and the repo rename)
 
 ---
 

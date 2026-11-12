@@ -9,8 +9,8 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Game rules: valid guesses and puzzle cadence
 
 - **Date**: 2026-11-12
-- **Iteration**: 1
-- **Status**: Draft
+- **Iteration**: 2
+- **Status**: Partially Implemented
 - **Deciders**: Alisha Chowhan (human), Lexeme 5.5 (Claude Opus 5.5)
 
 **TL;DR**: Before writing code, decide what counts as a legal guess and whether there is one shared puzzle per day or unlimited play. Both choices shape the word-list files, the game state, and what gets saved in the browser.
@@ -89,23 +89,43 @@ C — Daily plus practice. Build the game logic so it takes the answer as input.
 
 ## Decision
 
-*Pending: filled in once both questions above are answered.*
+### Context
+Answers are CS terms; the open choices were what a player may type and when a new puzzle appears. Both were answered by Alisha on 2026-11-12, accepting the recommendations.
+
+### Chosen
+- **Valid guesses — B**: any English five-letter word from ENABLE (public domain; Debian's scowl package README records its release into the public domain), **plus** every CS answer. The union matters: 15 of the 128 draft answers (MUTEX, REGEX, TUPLE, ASYNC, DEQUE, CONST, INODE, LEXER, QUBIT, ARITY, MIXIN, VOXEL, ALLOC, ASCII, LOGIN) are not in ENABLE.
+- **Cadence — C**, daily first: the game core takes the answer as input; daily mode is built, practice mode is next.
+
+**Rationale**: as in the answered recommendations above.
+
+**Trade-offs accepted**: the guess list adds ~52 KB raw to the bundle (whole JS bundle: 51.6 KB gzipped); every answer is readable in the page source (no backend, as assumed).
+
+### Consequences
+- **The answer file's order is the daily schedule.** Day N is `ANSWERS[N % length]`, counted in local calendar days from 2026-11-12 (`app/src/game/daily.ts`). There's no runtime shuffle: the list was mixed once by hand, so **new words may only be appended**. Inserting or reordering would change which word past days had. I made this design call while implementing, to keep the schedule stable.
+- **Measured list size: 128 answers.** That's above the falsifier's ~100 threshold, so cadence C stands, but it's below my 150–250 estimate. At 128, daily puzzles start repeating around **2027-03-20** unless the list grows. A test (`words.spec.ts`) fails if the list drops under 100, which is the condition that would reopen QST-PUZZLE-CADENCE.
+- Daily progress is saved in `localStorage` per day number, so a reload restores the board instead of allowing a replay. Saved guesses are re-validated, not trusted.
+- Day rollover is computed from calendar dates, not timestamps. Subtracting local midnights loses a day after a daylight-saving change (verified: 122 vs. the correct 123 for 2027-03-15 in America/New_York). A test pins this.
 
 ---
 
 ## Open Follow-ups
 
-- [ ] Unverified assumption: the five-letter CS-term count (~150–250) is a guess. Write the real list before trusting the cadence math.
-- [ ] Concern: feedback shown by **color alone** fails for color-blind players. Plan for a high-contrast option and an accessible label on every tile (e.g., "A, correct position") from the start; adding them later is harder.
-- [ ] Future task: decide who curates the answer list and how disputed terms are handled. (Is "LINUX" a CS word? "AGILE"? Only words that are fair to a CS student?)
+- [x] Unverified assumption: the five-letter CS-term count (~150–250) was a guess. **Measured: 128** in the first draft list (see Decision → Consequences).
+- [ ] Concern: feedback shown by **color alone** fails for color-blind players. *Partly done*: every tile has a spoken label ("A, correct spot") and the palette uses teal and amber, which differ in brightness as well as hue. Still open: a high-contrast option.
+- [ ] Future task: decide who curates the answer list and how disputed terms are handled. (Is "LINUX" a CS word? "AGILE"? Only words that are fair to a CS student?) The draft avoids plurals and proper nouns. **Alisha to review `app/src/game/words/answers.ts`**, which also includes some words that are as much everyday as CS, such as LOGIN, VIRUS, MODEL and CLOUD.
+- [ ] Future task: **the reveal should teach the term.** The accepted rationale for QST-VALID-GUESSES says "the reveal teaches the term", but today the end screen shows only the word. Add a one-line definition for each answer.
+- [ ] Future task: practice mode (random answer, never today's word, not saved), which completes cadence C.
 
 ---
 
 ## Action Items
 
-- [ ] Draft the five-letter CS answer list and count it - Owner: Lexeme 5.5 (draft), Alisha Chowhan (curation)
-- [ ] If QST-VALID-GUESSES lands on B: pick an English word list and check its license - Owner: Lexeme 5.5
-- [ ] Write the repeated-letter feedback tests before the feedback code (QUEUE/EERIE-class cases) - Owner: Lexeme 5.5
+- [x] Draft the five-letter CS answer list and count it (128) - Owner: Lexeme 5.5
+- [ ] Curate the answer list (keep / cut / add, append-only) - Owner: Alisha Chowhan
+- [x] Pick an English word list and check its license (ENABLE, public domain) - Owner: Lexeme 5.5
+- [x] Write the repeated-letter feedback tests (QUEUE/EERIE, TOKEN/EMBED, ARRAY/RADIX) - Owner: Lexeme 5.5
+- [ ] Practice mode - Owner: Lexeme 5.5
+- [ ] One-line definitions shown on the reveal - Owner: Lexeme 5.5 (draft), Alisha Chowhan (review)
 
 ---
 
@@ -126,6 +146,12 @@ C — Daily plus practice. Build the game logic so it takes the answer as input.
 - Contributors: Lexeme 5.5 (Claude Opus 5.5)
 - Changes: Split the brief into game rules (this ADR) and toolchain (ADR-0002). Asked two questions with recommendations. Wrote down the five-letter, repeated-letter and no-backend assumptions.
 - Outcome: Draft; waiting on Alisha's answers
+
+### Iteration 2 (2026-11-12)
+- Trigger: Alisha answered both questions (B, C), accepting the recommendations
+- Contributors: Alisha Chowhan (answers), Lexeme 5.5 (Claude Opus 5.5; implementation, this entry)
+- Changes: Filled in the Decision section. Built the scoring function, the guess check (ENABLE plus the answers), the daily schedule with saved progress, and 28 tests. Measured the list at 128 words. Recorded the append-only schedule rule. Added follow-ups for the definitions on the reveal and for practice mode.
+- Outcome: Draft → Partially Implemented (daily mode built; practice mode and list curation remain)
 
 ---
 

@@ -92,7 +92,7 @@ Before serving any change:
 2. Fix any failures before committing
 3. Never serve changes with a failing gate
 
-**Why**: There is no code yet, so today `just gate` checks only two things: that instantiation is complete (no leftover template placeholders or fixture files) and that the crew registry parses. When the Vue app is scaffolded (ADR-0002), the gate's project slot in the `justfile` gets `npm test` and `npm run build`. `npm test` (Vitest) covers the feedback-coloring logic, especially repeated letters: when an answer has one E and the guess has two, only one E may be marked. `npm run build` catches template and compile errors, and a wrong Vite `base` path, before anything reaches GitHub Pages. Extending the gate is an action item in ADR-0002, not optional.
+**Why**: `just gate` checks that instantiation is complete and that the crew registry parses. Then it runs the app's checks in `app/`. `npm test` runs Vitest over the game logic: the repeated-letter scoring rule (when an answer has one E and the guess has two, only one E may be marked), the word lists, and the daily rollover, including a daylight-saving bug the naive date math really has. `npm run build` type-checks with `vue-tsc` and runs the production build, which catches template and compile errors and a wrong Vite `base` before anything reaches GitHub Pages. **Known problem**: until kintsugi is adopted, the gate stops early at the lock warning (`docs/TECHNICAL-DEBT.md`, TD-3); meanwhile run `(cd app && npm test && npm run build)` directly.
 
 **Process**:
 ```bash
@@ -249,10 +249,12 @@ If the script was successfully used, append as comments how, and what the outcom
 A browser word-guessing game: you guess a hidden five-letter word and get colored feedback for each letter. The twist is that every answer is a computer-science term (ARRAY, STACK, QUEUE, CACHE, TOKEN…). It's built with Vue single-file components using scoped CSS, so styles stay inside each component, and it's hosted free as a static site on GitHub Pages. This repo holds both the game and its decision records; implementation happens here.
 
 ### Current focus:
-Settling the decisions that come before any code: game rules (ADR-0001) and toolchain and deploy (ADR-0002). Scaffolding starts once their questions are answered.
+Daily mode is built and tested in `app/`. Next: choose the name (ADR-0002 QST-GAME-NAME), rename the repo, deploy, then add practice mode and the definitions shown on the reveal (ADR-0001).
 
 ### Key decisions made:
-*(List ADRs here as they land, e.g. `- Auth approach — see docs/adr/0001-*.md`. Empty at birth is healthy.)*
+- Game rules: CS answers, any English word as a guess; daily puzzle plus practice; answer-file order is the schedule (append-only). See `docs/adr/0001-game-rules-valid-guesses-and-puzzle-cadence.md`
+- Toolchain: Vite + Vue 3 + TypeScript in `app/`; scoped CSS plus one global theme file; GitHub Actions deploy with `base` taken from the repo name; original name and repo rename before deploy. See `docs/adr/0002-toolchain-and-deployment-vue-sfc-build-language-github-pages.md`
+- Workarounds: `docs/TECHNICAL-DEBT.md`
 
 ### Open questions:
 ```bash
