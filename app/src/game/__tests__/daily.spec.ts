@@ -1,5 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
-import { answerForDay, dayNumber } from '../daily'
+import { answerForDay, dailyStorageKey, dayNumber } from '../daily'
+import { restoreGame } from '../game'
 import { ANSWERS } from '../words'
 
 // Pin a timezone that has daylight saving, so the DST case means something even
@@ -43,5 +44,23 @@ describe('answerForDay', () => {
 
   it('still returns a real answer before the epoch (a player whose clock or date is behind launch)', () => {
     expect(ANSWERS).toContain(answerForDay(-1))
+  })
+})
+
+describe('Regression tests', () => {
+  it('does not replay guesses saved against an old answer list (fixes ADR-0003 list swap)', () => {
+    // Bug: the storage key was `five-bytes:daily:<day>`. Day 0 was first served
+    // with the CS list (answer STACK); ADR-0003 replaced the list, so day 0 became
+    // PRINT. A player who had solved STACK would reload into a board where STACK
+    // is a wrong first guess against PRINT — a half-played game they never played.
+    // Fixed 2026-11-12 by keying saved progress on the answer as well as the day.
+    const store = new Map<string, string[]>()
+    store.set(dailyStorageKey(0, 'STACK'), ['CRANE', 'STACK']) // saved under the old list
+
+    const saved = store.get(dailyStorageKey(0, 'PRINT')) ?? []
+    const game = restoreGame('PRINT', saved, () => true)
+
+    expect(game.guesses).toEqual([])
+    expect(game.status).toBe('playing')
   })
 })

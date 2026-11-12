@@ -1,34 +1,91 @@
 /**
- * The CS answer list — and, by its ORDER, the daily schedule.
+ * The answer list — and, by its ORDER, the daily schedule.
  *
+ * Everyday five-letter English words (ADR-0003; replaced the CS-term list).
  * Day N of the daily puzzle is ANSWERS[N % ANSWERS.length] (see ../daily.ts).
- * The order below was mixed once by hand at authoring time, so the file IS the
- * schedule. Consequences:
+ * Generated once by scripts/ephemeral/2026-11-12-build-everyday-answers.mjs
+ * (hand-curated, shuffled with a fixed seed). From now on:
  *   - APPEND new words at the end only. Inserting, removing or reordering
- *     changes which word past and future days get (a player mid-streak would
- *     see "yesterday's" word change).
- *   - Words are exactly five uppercase letters; plurals and proper nouns are
- *     avoided so every answer is fair to a CS student (curation rule, draft —
- *     Alisha has the final say; see ADR-0001 Open Follow-ups).
+ *     changes which word past and future days get.
+ *   - Words are exactly five uppercase letters, in the ENABLE dictionary, with
+ *     no plurals or proper nouns. __tests__/words.spec.ts enforces the shape rules.
  *
- * Draft list by Lexeme 5.5, 2026-11-12. Tests in __tests__/words.spec.ts
- * enforce the shape rules.
+ * 593 words. Draft by Lexeme 5.5, 2026-11-12, for Alisha's review.
  */
 export const ANSWERS: readonly string[] = [
-  'STACK', 'MUTEX', 'GRAPH', 'TOKEN', 'CACHE', 'PARSE', 'QUEUE', 'ARRAY',
-  'YIELD', 'PIXEL', 'REGEX', 'TUPLE', 'SHELL', 'MERGE', 'ASYNC', 'INDEX',
-  'PROXY', 'FLOAT', 'DEBUG', 'SCOPE', 'DEQUE', 'LATCH', 'QUERY', 'CLASS',
-  'RADIX', 'FETCH', 'BLOOM', 'TRAIT', 'SPAWN', 'TABLE', 'EVICT', 'LOGIC',
-  'MONAD', 'ROUTE', 'CONST', 'PIVOT', 'INODE', 'CLONE', 'AWAIT', 'UNION',
-  'SHARD', 'LEXER', 'FRAME', 'QUBIT', 'SLICE', 'PANIC', 'MACRO', 'OCTET',
-  'CHUNK', 'ARITY', 'FLUSH', 'TRACE', 'BATCH', 'MIXIN', 'EPOCH', 'FIELD',
-  'ABORT', 'VOXEL', 'SPLIT', 'CLOCK', 'NONCE', 'SUPER', 'PROBE', 'CODEC',
-  'LAYER', 'WHILE', 'FAULT', 'GLYPH', 'ALLOC', 'ENTRY', 'THROW', 'SHIFT',
-  'PATCH', 'UNARY', 'SPOOL', 'VALUE', 'RETRY', 'ALIAS', 'CYCLE', 'MODEL',
-  'CATCH', 'INFIX', 'BUILD', 'DIGIT', 'QUOTA', 'MATCH', 'TIMER', 'OCTAL',
-  'STATE', 'CURRY', 'BLOCK', 'ASCII', 'PURGE', 'LABEL', 'RELAY', 'DELTA',
-  'EVENT', 'CRAWL', 'PRUNE', 'LOGIN', 'MOUNT', 'FINAL', 'CARRY', 'ACTOR',
-  'RANGE', 'ERROR', 'STALL', 'AGENT', 'CHAIN', 'EMBED', 'INPUT', 'DEPTH',
-  'SLEEP', 'MODEM', 'RESET', 'FLOOR', 'PRINT', 'ADDER', 'STORE', 'GUARD',
-  'WRITE', 'LOCAL', 'CLOUD', 'APPLY', 'CRASH', 'COUNT', 'VIRUS', 'UNSET',
+  'PRINT', 'ROBIN', 'DOZEN', 'HEAVY', 'THIEF', 'PROUD', 'GRANT', 'INPUT',
+  'GREAT', 'SNACK', 'WHITE', 'ANGER', 'LOWER', 'MIXER', 'LEGAL', 'FLOOD',
+  'SCALE', 'FLUID', 'FANCY', 'WRONG', 'CLERK', 'ALIVE', 'VOTER', 'RULER',
+  'SLOPE', 'MANGO', 'FEAST', 'QUITE', 'GHOST', 'AWARD', 'DREAM', 'SCORE',
+  'UNTIL', 'PURSE', 'JUICE', 'ABOVE', 'GLORY', 'STATE', 'ROBOT', 'LEMON',
+  'TRICK', 'LUCKY', 'COAST', 'FLOOR', 'DELAY', 'CANDY', 'WOUND', 'ARGUE',
+  'RAINY', 'COACH', 'SCENE', 'LIGHT', 'TRAIL', 'GLASS', 'CIVIL', 'CRAZY',
+  'MAGIC', 'FENCE', 'MOUTH', 'LASER', 'SPARK', 'SMOKE', 'SHOCK', 'NIGHT',
+  'SPACE', 'STUFF', 'HOUSE', 'STRIP', 'THUMB', 'GRADE', 'TOAST', 'LOCAL',
+  'TOOTH', 'RAISE', 'SWORD', 'GREEN', 'VOICE', 'EARLY', 'THICK', 'HUMAN',
+  'AGREE', 'CLIFF', 'VISIT', 'TEETH', 'CYCLE', 'WHEAT', 'TRIAL', 'COUCH',
+  'TABLE', 'NORTH', 'EXIST', 'FORCE', 'STORE', 'BIRTH', 'MEDIA', 'STACK',
+  'EQUAL', 'BEGIN', 'BRAND', 'ADMIT', 'BLACK', 'INDEX', 'THIRD', 'UNITY',
+  'BOARD', 'TRIBE', 'RELAX', 'IVORY', 'LOGIC', 'BLAME', 'UPSET', 'SHADE',
+  'CHECK', 'QUEST', 'CHAIR', 'MOUSE', 'MAYOR', 'NURSE', 'BREAD', 'SMILE',
+  'SPARE', 'VIVID', 'SPEND', 'WHEEL', 'PASTA', 'FLASH', 'AMONG', 'HUMOR',
+  'GRAND', 'SHEET', 'MIGHT', 'START', 'THROW', 'CAUSE', 'AUDIO', 'HOTEL',
+  'CHILD', 'URBAN', 'NEVER', 'SWIFT', 'REFER', 'FIFTH', 'ALERT', 'RATIO',
+  'CHARM', 'METER', 'SPEAK', 'SHIRT', 'ACTOR', 'BRUSH', 'PRESS', 'ALLOW',
+  'HURRY', 'SWEET', 'RIDGE', 'SWEAT', 'STOOL', 'STICK', 'RANCH', 'CABIN',
+  'WATER', 'DRAFT', 'FRAME', 'OLIVE', 'SLICE', 'SHARK', 'FORUM', 'MOUNT',
+  'PRIDE', 'EMPTY', 'AWARE', 'THREE', 'PLATE', 'ADULT', 'THANK', 'FRESH',
+  'STAIR', 'TRUTH', 'ONION', 'WORTH', 'TREND', 'MINOR', 'SPEED', 'GROUP',
+  'THERE', 'METAL', 'MEDAL', 'HORSE', 'REBEL', 'HOBBY', 'STAMP', 'OPERA',
+  'FOCUS', 'SPINE', 'THINK', 'MATCH', 'RADIO', 'ARISE', 'ENTRY', 'PRIZE',
+  'CLAIM', 'BELOW', 'CHALK', 'ALONG', 'LEARN', 'POLAR', 'CHEAP', 'PUPIL',
+  'MONTH', 'DEATH', 'DRILL', 'DRIVE', 'LINEN', 'NINJA', 'BLIND', 'DEPTH',
+  'MAJOR', 'CATCH', 'BOOST', 'DIRTY', 'SCENT', 'ROUTE', 'TRUST', 'DWELL',
+  'DAILY', 'RALLY', 'HARSH', 'LUNCH', 'QUILT', 'ANGLE', 'HEART', 'UPPER',
+  'BEAST', 'COVER', 'CHEEK', 'BRAIN', 'EARTH', 'PILOT', 'IDEAL', 'APART',
+  'GUEST', 'PEARL', 'VITAL', 'BLAST', 'LEVEL', 'AFTER', 'FRUIT', 'TRULY',
+  'PIANO', 'REACH', 'FROST', 'REPLY', 'GLOVE', 'CROSS', 'FAITH', 'SAUCE',
+  'SUGAR', 'BLESS', 'CROWN', 'CLEAN', 'PITCH', 'JOINT', 'DRAIN', 'INNER',
+  'CLOUD', 'BRIDE', 'CROWD', 'READY', 'PHASE', 'SHELF', 'WIDTH', 'TRACE',
+  'CARRY', 'SKIRT', 'YACHT', 'FLOUR', 'CLEAR', 'MORAL', 'EXTRA', 'WHERE',
+  'LABEL', 'WHALE', 'DIARY', 'SHEEP', 'CRAFT', 'SCOUT', 'LAYER', 'BUYER',
+  'SIGHT', 'WOMAN', 'STYLE', 'BLOOD', 'GIANT', 'STILL', 'PRICE', 'FIFTY',
+  'DANCE', 'DOUBT', 'JEWEL', 'PLANE', 'OWNER', 'TOPIC', 'STOCK', 'BRING',
+  'OCEAN', 'OUTER', 'NOISE', 'CREAM', 'CLOSE', 'HELLO', 'ELBOW', 'ROYAL',
+  'YOUNG', 'TRACK', 'SALAD', 'CRUSH', 'BEACH', 'PENNY', 'DRESS', 'CARGO',
+  'ALBUM', 'TOUGH', 'ENTER', 'BROAD', 'EAGER', 'STEAM', 'WORLD', 'COURT',
+  'POINT', 'TOWEL', 'STRAW', 'ROAST', 'GRIEF', 'SNAKE', 'GRILL', 'BLEND',
+  'RIGHT', 'TWICE', 'BLOCK', 'POWER', 'TRADE', 'GUIDE', 'GRAVE', 'SPORT',
+  'FLAME', 'VIDEO', 'TITLE', 'MARCH', 'TOWER', 'PAPER', 'BURST', 'WATCH',
+  'BENCH', 'PEACH', 'CHOIR', 'TOTAL', 'TASTE', 'TODAY', 'CRIME', 'ADOPT',
+  'THEME', 'KNIFE', 'VALUE', 'REALM', 'PIECE', 'STAND', 'CABLE', 'ROCKY',
+  'RIDER', 'SPELL', 'MOVIE', 'PROVE', 'SOLVE', 'VALID', 'PATCH', 'STOVE',
+  'HONOR', 'BOOTH', 'CHASE', 'PAUSE', 'PEACE', 'MAKER', 'NOVEL', 'PLAIN',
+  'EVENT', 'POUND', 'RAPID', 'DOUGH', 'ROUGH', 'LEAVE', 'CHART', 'TRAIN',
+  'DRIFT', 'STEEP', 'SHINE', 'PHOTO', 'PHONE', 'LEAST', 'ARENA', 'MAYBE',
+  'ENEMY', 'QUOTE', 'LAUGH', 'LATER', 'SPICE', 'TOKEN', 'CHIEF', 'LOYAL',
+  'TOUCH', 'GRACE', 'TORCH', 'RIVAL', 'SHORE', 'TIGER', 'BADGE', 'QUEEN',
+  'STONE', 'PLACE', 'OTHER', 'TREAT', 'ABOUT', 'TRUCK', 'FEVER', 'PARTY',
+  'WASTE', 'WRITE', 'SUPER', 'UNION', 'TRUNK', 'ZEBRA', 'ERROR', 'BERRY',
+  'CRASH', 'FIELD', 'BEARD', 'RIVER', 'LOVER', 'GREET', 'APPLE', 'EXACT',
+  'BRIEF', 'WORRY', 'SUITE', 'DRINK', 'FORTH', 'SHAKE', 'MINUS', 'SPRAY',
+  'PIZZA', 'YIELD', 'ENJOY', 'PAINT', 'SOUTH', 'TIMER', 'FALSE', 'BROWN',
+  'SMART', 'NERVE', 'CURVE', 'BRAVE', 'CRANE', 'USUAL', 'DRAMA', 'EIGHT',
+  'SILLY', 'SLEEP', 'MODEL', 'HABIT', 'SEVEN', 'CHEST', 'SOLID', 'SUNNY',
+  'RADAR', 'SHAPE', 'PANEL', 'ALTER', 'GUESS', 'TEACH', 'BRICK', 'NOBLE',
+  'JUDGE', 'LEASE', 'CHESS', 'CLOCK', 'SHIFT', 'CLASS', 'PRIOR', 'SMELL',
+  'CHEER', 'SINCE', 'FUNNY', 'FIRST', 'FRONT', 'PROOF', 'WAGON', 'RURAL',
+  'ELDER', 'KNOCK', 'DAIRY', 'STAGE', 'MONEY', 'ORDER', 'LIMIT', 'BUNCH',
+  'TIGHT', 'PLAZA', 'CHILL', 'OFTEN', 'ASIDE', 'SWING', 'HAPPY', 'SHORT',
+  'SHOUT', 'OFFER', 'LARGE', 'SQUAD', 'SHARE', 'FAINT', 'BEING', 'STORM',
+  'ROUND', 'CLIMB', 'FLOAT', 'MOTOR', 'AWAKE', 'QUIET', 'HONEY', 'IMAGE',
+  'EVERY', 'STAKE', 'TWIST', 'EAGLE', 'ALARM', 'ISSUE', 'ORBIT', 'CLOTH',
+  'BAKER', 'STUDY', 'BLANK', 'SLIDE', 'SPLIT', 'SHARP', 'WHOLE', 'CLICK',
+  'THING', 'STORY', 'MERCY', 'MAPLE', 'BASIC', 'BLOOM', 'AGENT', 'AVOID',
+  'MERRY', 'QUICK', 'AGAIN', 'SPOON', 'FIGHT', 'ALIKE', 'FINAL', 'SMALL',
+  'AHEAD', 'ANGRY', 'YOUTH', 'SCARF', 'WHICH', 'BREAK', 'BLADE', 'WHILE',
+  'PRIME', 'RANGE', 'GRAIN', 'APPLY', 'STAFF', 'MUSIC', 'ESSAY', 'GRASS',
+  'ALONE', 'CHAIN', 'GUARD', 'UNCLE', 'LOOSE', 'SOUND', 'SORRY', 'GRAPE',
+  'PLANT', 'STEEL', 'TOXIC', 'BUILD', 'COUNT', 'SHELL', 'SKILL', 'GLOBE',
+  'UNDER',
 ]

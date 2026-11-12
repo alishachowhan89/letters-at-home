@@ -19,6 +19,16 @@ export function dayNumber(now: Date): number {
   return Math.floor((today - epoch) / MS_PER_DAY)
 }
 
+/**
+ * localStorage key for a day's saved guesses. It includes the ANSWER, not just
+ * the day: if the answer list ever changes (as it did in ADR-0003, CS terms →
+ * everyday words), guesses saved against the old word must not be replayed
+ * against the new one.
+ */
+export function dailyStorageKey(day: number, answer: string): string {
+  return `five-bytes:daily:${day}:${answer}`
+}
+
 /** The daily answer for a given day number; wraps after the list runs out. */
 export function answerForDay(day: number, answers: readonly string[] = ANSWERS): string {
   const i = ((day % answers.length) + answers.length) % answers.length

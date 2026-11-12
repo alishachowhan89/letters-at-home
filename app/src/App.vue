@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import { KeepAlive, ref } from 'vue'
 import GamePanel from './components/GamePanel.vue'
-import { answerForDay, dayNumber } from './game/daily'
+import { answerForDay, dailyStorageKey, dayNumber } from './game/daily'
 import { pickPracticeAnswer } from './game/practice'
 import { ANSWERS } from './game/words'
 
-// QST-GAME-NAME answered C (ADR-0002). Also in index.html's <title>.
-const GAME_TITLE = 'Five Bytes'
+// ADR-0003 (replaces Five Bytes from ADR-0002 QST-GAME-NAME). Also in index.html's <title>.
+const GAME_TITLE = 'Letters at Home'
 
 type Mode = 'daily' | 'practice'
 const mode = ref<Mode>('daily')
 
 const day = dayNumber(new Date())
 const dailyAnswer = answerForDay(day)
-const dailyKey = `five-bytes:daily:${day}`
+const dailyKey = dailyStorageKey(day, dailyAnswer)
 
 // Practice: random answer, never today's daily word, never the one just played.
 const practiceAnswer = ref(pickPracticeAnswer(ANSWERS, [dailyAnswer]))
@@ -29,7 +29,7 @@ function newPracticeWord() {
   <div class="app">
     <header class="header">
       <h1 class="title"><span class="prompt">&gt;</span> {{ GAME_TITLE }}</h1>
-      <p class="subtitle">every answer is a CS term</p>
+      <p class="subtitle">guess the five-letter word in six tries</p>
       <div class="modes" role="group" aria-label="Game mode">
         <button type="button" class="mode" :aria-pressed="mode === 'daily'" @click="mode = 'daily'">
           daily #{{ day + 1 }}

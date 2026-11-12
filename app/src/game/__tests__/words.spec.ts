@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { ANSWERS, DEFINITIONS, isAcceptedGuess } from '../words'
+import { ANSWERS, isAcceptedGuess } from '../words'
 
 describe('answer list', () => {
   it('contains only five-letter uppercase words (a sixth letter would break the board)', () => {
@@ -19,28 +19,17 @@ describe('answer list', () => {
     // fails, the decision's falsifier fired: reopen the question, don't just lower the bar.
     expect(ANSWERS.length).toBeGreaterThanOrEqual(100)
   })
-
-  it('has a definition for every answer, so the end-of-game reveal is never blank', () => {
-    // Appending a word to answers.ts without defining it is the easy mistake.
-    const undefinedWords = ANSWERS.filter((w) => !DEFINITIONS[w]?.trim())
-    expect(undefinedWords).toEqual([])
-  })
-
-  it('has no definitions for words that are not answers (a typo in a key hides a missing one)', () => {
-    const orphans = Object.keys(DEFINITIONS).filter((w) => !ANSWERS.includes(w))
-    expect(orphans).toEqual([])
-  })
 })
 
 describe('isAcceptedGuess', () => {
-  it('accepts ordinary English words, so non-CS players can open with CRANE', () => {
+  it('accepts ordinary English words, so a player can open with CRANE', () => {
     expect(isAcceptedGuess('CRANE')).toBe(true)
     expect(isAcceptedGuess('slate')).toBe(true)
   })
 
-  it('accepts every CS answer, including terms no English dictionary has', () => {
-    // MUTEX, REGEX, ASYNC, QUBIT are not in ENABLE; without the union with
-    // ANSWERS a player could not type the very word they are hunting for.
+  it('accepts every answer, so no daily word is ever unguessable', () => {
+    // If an answer were rejected as "not in the word list", the player could
+    // never type the word they are hunting for.
     const rejected = ANSWERS.filter((w) => !isAcceptedGuess(w))
     expect(rejected).toEqual([])
   })

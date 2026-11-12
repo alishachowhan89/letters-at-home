@@ -1,7 +1,7 @@
 import { computed, ref, shallowRef, watch } from 'vue'
 import { MAX_GUESSES, WORD_LENGTH, scoreGuess, type LetterState } from './feedback'
 import { keyboardStates, restoreGame, submitGuess, type GameState, type RejectReason } from './game'
-import { DEFINITIONS, isAcceptedGuess } from './words'
+import { isAcceptedGuess } from './words'
 
 export interface BoardRow {
   letters: string[]
@@ -89,12 +89,5 @@ export function useWordGame(answer: string, storageKey: string | null) {
 
   const keyStates = computed(() => keyboardStates(state.value))
 
-  /** Shown only once the round is over — the reveal teaches the term (ADR-0001). */
-  const reveal = computed(() =>
-    state.value.status === 'playing'
-      ? null
-      : { word: state.value.answer, definition: DEFINITIONS[state.value.answer] ?? '' },
-  )
-
-  return { state, rows, keyStates, message, reveal, typeLetter, backspace, submit }
+  return { state, rows, keyStates, message, typeLetter, backspace, submit }
 }

@@ -8,7 +8,7 @@ import { useWordGame } from '@/game/useWordGame'
 // side by side (<KeepAlive>), so switching modes never loses either board.
 const props = defineProps<{ answer: string; storageKey: string | null }>()
 
-const { rows, keyStates, message, reveal, typeLetter, backspace, submit } = useWordGame(
+const { rows, keyStates, message, typeLetter, backspace, submit } = useWordGame(
   props.answer,
   props.storageKey,
 )
@@ -41,12 +41,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onPhysicalKey))
 <template>
   <div class="panel">
     <GameBoard :rows="rows" />
-    <div class="feedback">
-      <p class="message" role="status" aria-live="polite">{{ message }}</p>
-      <p v-if="reveal" class="reveal">
-        <strong class="term">{{ reveal.word }}</strong> — {{ reveal.definition }}
-      </p>
-    </div>
+    <p class="message" role="status" aria-live="polite">{{ message }}</p>
     <OnScreenKeyboard :states="keyStates" @key="onKey" />
   </div>
 </template>
@@ -59,25 +54,10 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onPhysicalKey))
   justify-content: space-between;
   gap: 16px;
 }
-.feedback {
-  min-height: 3.5em;
-  text-align: center;
-  max-width: 34rem;
-  margin-inline: auto;
-}
 .message {
   min-height: 1.5em;
+  text-align: center;
   font-size: 0.95rem;
   color: var(--accent);
-}
-.reveal {
-  margin-top: 6px;
-  font-size: 0.85rem;
-  line-height: 1.45;
-  color: var(--muted);
-}
-.term {
-  color: var(--correct);
-  letter-spacing: 0.06em;
 }
 </style>
