@@ -9,8 +9,8 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Toolchain and deployment: Vue SFC build, language, GitHub Pages
 
 - **Date**: 2026-11-12
-- **Iteration**: 3
-- **Status**: Partially Implemented
+- **Iteration**: 4
+- **Status**: Implemented
 - **Deciders**: Alisha Chowhan (human), Lexeme 5.5 (Claude Opus 5.5)
 
 **TL;DR**: Scoped CSS means compiled Vue single-file components, so a build step is required. That leaves one open choice that affects every file, JavaScript or TypeScript, plus a deferred question about the product's public name to settle before the first deploy.
@@ -138,11 +138,12 @@ C — Five Bytes. Rationale: It says what the game is (five letters) in CS terms
 
 - [x] Scaffold with `npm create vue@latest` (TS + Vitest), extend `just gate` - Owner: Lexeme 5.5
 - [x] Add the GitHub Actions Pages workflow (deploy runs only when triggered by hand for now) - Owner: Lexeme 5.5
-- [ ] Turn on Pages: Settings → Pages → Source: GitHub Actions - Owner: Alisha Chowhan
+- [x] Turn on Pages, source GitHub Actions (done via `gh api`, with Alisha's go-ahead) - Owner: Lexeme 5.5
 - [x] Answer QST-PRODUCT-NAME (B) - Owner: Alisha Chowhan
 - [x] Answer QST-GAME-NAME (C — Five Bytes) - Owner: Alisha Chowhan
 - [x] Update `GAME_TITLE` and `<title>`; make the deploy job depend on the repo name - Owner: Lexeme 5.5
-- [ ] Rename the GitHub repo to `five-bytes`, update the local `origin` URL, push - Owner: Alisha Chowhan (or Lexeme 5.5 with her go-ahead)
+- [x] Rename the GitHub repo to `five-bytes`, update the local `origin` URL, push (with Alisha's go-ahead) - Owner: Lexeme 5.5
+- [ ] Bump `actions/checkout` and `actions/setup-node` past v4. CI warns that they target the deprecated Node 20 runtime and are being forced onto Node 24 - Owner: Lexeme 5.5
 
 ---
 
@@ -175,6 +176,12 @@ C — Five Bytes. Rationale: It says what the game is (five letters) in CS terms
 - Contributors: Alisha Chowhan (answer), Lexeme 5.5 (Claude Opus 5.5; implementation, this entry)
 - Changes: Renamed the game to Five Bytes in the title, header and storage-key prefix (`five-bytes:daily:<day>`; nothing had been saved under the old prefix, since nothing was deployed). The deploy job now depends on the repo name instead of being manual-only.
 - Outcome: still Partially Implemented. What's left is the repo rename, enabling Pages and pushing, all of which change things on GitHub.
+
+### Iteration 4 (2026-11-12)
+- Trigger: Alisha chose "you do all three now" (rename, Pages, push)
+- Contributors: Alisha Chowhan (go-ahead), Lexeme 5.5 (Claude Opus 5.5)
+- Changes: Renamed the repo to `alishachowhan89/five-bytes` (`gh repo rename`, which also updated `origin`). Enabled Pages with `build_type=workflow`. Pushed 9 commits. Workflow run 43319393232: build (tests, type-check, build) and deploy both passed. Verified live: https://alishachowhan89.github.io/five-bytes/ returns 200 with `<title>Five Bytes</title>`, and both assets under `/five-bytes/assets/` return 200, which confirms the base path came from the repo name.
+- Outcome: Partially Implemented → Implemented
 
 ---
 

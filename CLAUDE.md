@@ -1,6 +1,6 @@
 # CLAUDE.md - Project Guidance
 
-- **Project**: Five Bytes (repo still named `wordle-with-records` until the rename; see ADR-0002 QST-GAME-NAME)
+- **Project**: Five Bytes, live at https://alishachowhan89.github.io/five-bytes/ (repo `alishachowhan89/five-bytes`; local folder still `wordle-with-records`)
 - **Human**: Alisha Chowhan
 - **AI**: Lexeme 5.5 (Claude Opus 5.5, Claude Code), the only AI seat and its coordinator. No crew registry entries yet; add them to docs/inbox/agent-sessions.json if more seats join.
 - **Last Updated**: 2026-11-12
@@ -249,7 +249,7 @@ If the script was successfully used, append as comments how, and what the outcom
 A browser word-guessing game: you guess a hidden five-letter word and get colored feedback for each letter. The twist is that every answer is a computer-science term (ARRAY, STACK, QUEUE, CACHE, TOKEN…). It's built with Vue single-file components using scoped CSS, so styles stay inside each component, and it's hosted free as a static site on GitHub Pages. This repo holds both the game and its decision records; implementation happens here.
 
 ### Current focus:
-**Five Bytes** (ADR-0002 QST-GAME-NAME) has daily and practice modes and a definition on every reveal, all built and tested in `app/`. Next: rename the repo to `five-bytes`, enable Pages and push to make the first deploy; then Alisha curates the answer list and definitions.
+**Five Bytes** is live with daily and practice modes and a definition on every reveal. Every push to `main` deploys. Next: Alisha curates the answer list and definitions (append-only, ADR-0001); then the debt in `docs/TECHNICAL-DEBT.md` (Node upgrade → component tests; kintsugi → a gate that can pass).
 
 ### Key decisions made:
 - Game rules: CS answers, any English word as a guess; daily puzzle plus practice; answer-file order is the schedule (append-only). See `docs/adr/0001-game-rules-valid-guesses-and-puzzle-cadence.md`
