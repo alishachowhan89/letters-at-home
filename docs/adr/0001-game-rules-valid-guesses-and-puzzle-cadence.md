@@ -50,7 +50,7 @@ This ADR covers the **game-rules** part of that brief. The toolchain part is in 
 ## Questions
 
 ### QST-VALID-GUESSES: What counts as a legal guess?
-- Status: unanswered
+- Status: answered
 - Why asking: Answers will come from a hand-picked list of five-letter CS terms. The open question is what the player may *type*. With a small CS-only list, every guess has to be a CS word. That makes the game a vocabulary-recall test, and rejects normal openers like CRANE or SLATE. Allowing ordinary English words keeps the usual deduction game but means shipping a dictionary file. This choice decides which data files exist and what "not in word list" means.
 - Need: pick a letter (or override; an answer in any shape is complete)
 
@@ -64,12 +64,12 @@ Options:
 **B — CS answers, any real word as a guess.** *Rationale*: The "aha" in this game comes from narrowing down the letters, and that requires being free to probe with any real word. A forces players to guess from a list of maybe 200 terms, so the game shrinks to remembering the list. C removes the constraint that makes deduction interesting. B keeps the theme where it matters (the answer is always a CS word, and the reveal teaches the term) while making openings fair to non-CS players. It costs one extra data file and a license check. *Confidence*: 0.8 — because this is how the genre usually works and the costs are small and known. I haven't checked the dictionary's license yet; that's an action item. *If wrong*: if you mean this mainly as a **study tool**, where every guess should practice a CS term, the theme matters more than fair openings and this flips to **A**. Same if no dictionary with a compatible license turns up.
 
 **ANS:** (by Alisha Chowhan)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+B — CS answers, any real word as a guess. Rationale: The "aha" in this game comes from narrowing down the letters, and that requires being free to probe with any real word. A forces players to guess from a list of maybe 200 terms, so the game shrinks to remembering the list. C removes the constraint that makes deduction interesting. B keeps the theme where it matters (the answer is always a CS word, and the reveal teaches the term) while making openings fair to non-CS players. It costs one extra data file and a license check. Confidence: 0.8 — because this is how the genre usually works and the costs are small and known. I haven't checked the dictionary's license yet; that's an action item. If wrong: if you mean this mainly as a study tool, where every guess should practice a CS term, the theme matters more than fair openings and this flips to A. Same if no dictionary with a compatible license turns up.
 
 ---
 
 ### QST-PUZZLE-CADENCE: One shared puzzle per day, or play as many as you like?
-- Status: unanswered
+- Status: answered
 - Why asking: This decides how the answer is chosen (from the date, or at random), what gets saved in the browser (a daily streak, or just win counts), and whether players can compare results. It also interacts with the list size: if there are about 150–250 five-letter CS terms (unverified estimate from the first assumption above), a daily puzzle starts repeating within about 5–8 months. Unlimited play uses the words up as fast as people play.
 - Need: pick a letter (or override; an answer in any shape is complete)
 
@@ -83,7 +83,7 @@ Options:
 **C — Daily plus practice.** Build the game logic so it takes the answer as input. Ship daily mode first and add practice next. *Rationale*: A shared daily word is what makes these games social, and a GitHub Pages link is made for sharing. But daily-only is frustrating for the people who most need to play it: you while testing, and anyone who wants another round to learn the words. With the answer passed in, practice mode is a different picker and a toggle, not a second game. So most of C's cost is a design decision we make anyway. *Confidence*: 0.65 — because this is a product-taste call I can argue for but can't measure. The technical cost is low; the real question is what you want the game to feel like. *If wrong*: if the counted CS list comes in **under ~100 words**, a daily puzzle repeats within one semester and this flips to **B** (unless we allow more word lengths). If you're building this mainly to play yourself, not to share, it also flips to **B**.
 
 **ANS:** (by Alisha Chowhan)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+C — Daily plus practice. Build the game logic so it takes the answer as input. Ship daily mode first and add practice next. Rationale: A shared daily word is what makes these games social, and a GitHub Pages link is made for sharing. But daily-only is frustrating for the people who most need to play it: you while testing, and anyone who wants another round to learn the words. With the answer passed in, practice mode is a different picker and a toggle, not a second game. So most of C's cost is a design decision we make anyway. Confidence: 0.65 — because this is a product-taste call I can argue for but can't measure. The technical cost is low; the real question is what you want the game to feel like. If wrong: if the counted CS list comes in under ~100 words, a daily puzzle repeats within one semester and this flips to B (unless we allow more word lengths). If you're building this mainly to play yourself, not to share, it also flips to B.
 
 ---
 

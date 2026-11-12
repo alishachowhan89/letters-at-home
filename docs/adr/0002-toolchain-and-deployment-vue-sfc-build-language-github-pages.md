@@ -48,7 +48,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 ## Questions
 
 ### QST-STACK: JavaScript or TypeScript for the Vue single-file components?
-- Status: unanswered
+- Status: answered
 - Why asking: Scoped CSS needs Vue's SFC compiler, so we're on Vite with `.vue` files whatever happens. What's left is the script language in every component and module. Switching later means editing every file. TypeScript also adds a type-check (`vue-tsc`) to the verification gate. The game's core logic is small but full of edge cases: three feedback states, repeated letters, game won or lost.
 - Need: pick a letter (or override; an answer in any shape is complete)
 
@@ -62,7 +62,7 @@ Options:
 **B — Vite + Vue 3, TypeScript.** *Rationale*: This project's bugs will mostly be logic bugs in a small state machine: feedback states, the repeated-letter rule from ADR-0001, and game-over conditions. A type for the three states catches the "forgot a case" class of bug when you build, and the official scaffold makes TypeScript nearly free to set up. C is out because of scoped CSS. A is a fine choice; this is a matter of degree. *Confidence*: 0.6 — because the technical case for B is solid, but the right answer depends on something I don't know: how familiar you are with TypeScript and how much new material you want this project to involve. *If wrong*: if you haven't written TypeScript before and would rather spend your learning on Vue itself, choose **A**. The repeated-letter tests still give strong protection, and adding TypeScript before many components exist is cheap.
 
 **ANS:** (by Alisha Chowhan)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+B — Vite + Vue 3, TypeScript. Rationale: This project's bugs will mostly be logic bugs in a small state machine: feedback states, the repeated-letter rule from ADR-0001, and game-over conditions. A type for the three states catches the "forgot a case" class of bug when you build, and the official scaffold makes TypeScript nearly free to set up. C is out because of scoped CSS. A is a fine choice; this is a matter of degree. Confidence: 0.6 — because the technical case for B is solid, but the right answer depends on something I don't know: how familiar you are with TypeScript and how much new material you want this project to involve. If wrong: if you haven't written TypeScript before and would rather spend your learning on Vue itself, choose A. The repeated-letter tests still give strong protection, and adding TypeScript before many components exist is cheap.
 
 ---
 
@@ -75,7 +75,7 @@ Options:
 ## Open Follow-ups
 
 ### QST-PRODUCT-NAME: What is the game publicly called, and does the repo name change before the first deploy?
-- Status: deferred — doesn't block scaffolding; must be answered before the first GitHub Pages deploy
+- Status: answered
 - Why asking: The site will live at `https://<your-username>.github.io/<repo-name>/`, so the repo name is part of the public URL, and Vite's `base` path is set from it. The repo is currently `wordle-with-records`. "Wordle" is a trademark (owned by The New York Times), and the game should have its own identity anyway: its own name and look, not a copy of Wordle's. The risk for a free personal project is small but real, and it's cheapest to rename before anything is public, because afterwards the URL and `base` both change.
 - Need: pick a letter, and give a name if B or C (or override; an answer in any shape is complete)
 
@@ -89,7 +89,7 @@ Options:
 **B — Original name, rename the repo.** *Rationale*: The URL is the most-shared part of a GitHub Pages project. Renaming costs nothing before the first deploy and gets more expensive afterwards. An original name also matches the original visual design we're building anyway (ADR-0001, "The genre, not a copy"). *Confidence*: 0.7 — because the timing argument is solid. How much the trademark matters for a free hobby page is a judgment call, not a legal opinion. *If wrong*: if the repo name is deliberately about the *records* (this project as a methodology exercise more than a public game), keep the repo name and switch to **C**.
 
 **ANS:** (by Alisha Chowhan)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+B — Original name, rename the repo. Rationale: The URL is the most-shared part of a GitHub Pages project. Renaming costs nothing before the first deploy and gets more expensive afterwards. An original name also matches the original visual design we're building anyway (ADR-0001, "The genre, not a copy"). Confidence: 0.7 — because the timing argument is solid. How much the trademark matters for a free hobby page is a judgment call, not a legal opinion. If wrong: if the repo name is deliberately about the records (this project as a methodology exercise more than a public game), keep the repo name and switch to C.
 
 ---
 
