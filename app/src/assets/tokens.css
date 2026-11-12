@@ -1,0 +1,40 @@
+/*
+ * The ONE global stylesheet (ADR-0002, "Scoped CSS, with one exception"):
+ * theme values as custom properties + a minimal reset. No selectors for
+ * components live here — every component styles itself with <style scoped>
+ * and reads these variables, so "the correct colour" is defined exactly once.
+ *
+ * Palette: our own editor-at-night look (teal / amber / slate), deliberately
+ * not another game's green / yellow / grey (ADR-0001, "The genre, not a copy").
+ */
+:root {
+  --bg: #0e1116;
+  --surface: #161b22;
+  --key: #232a33;
+  --border: #30363d;
+  --text: #e6edf3;
+  --muted: #8b949e;
+  --accent: #58a6ff;
+  --correct: #2aa198;
+  --present: #d69e2e;
+  --absent: #2b313a;
+  --on-state: #0e1116;
+  --radius: 6px;
+  --font-mono: ui-monospace, 'Cascadia Code', 'SF Mono', Consolas, 'Liberation Mono', monospace;
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-mono);
+  -webkit-font-smoothing: antialiased;
+}

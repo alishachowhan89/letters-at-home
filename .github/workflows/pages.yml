@@ -1,0 +1,62 @@
+# Build, test and deploy the game to GitHub Pages (ADR-0002).
+#
+# Every push to main runs the tests and the production build — a red X on a
+# commit means the gate failed in CI too.
+#
+# DEPLOY is manual for now (Actions tab → "pages" → Run workflow): QST-PRODUCT-NAME
+# was answered "rename the repo before the first deploy", and the name is not
+# chosen yet. After the rename, delete the `if:` on the deploy job so every
+# push to main publishes.
+#
+# One-time repo setting: Settings → Pages → Build and deployment → Source: GitHub Actions.
+
+name: pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+        env:
+          # Project sites live under /<repo-name>/ — read from the repo itself,
+          # so a rename needs no edit here or in vite.config.ts.
+          BASE_PATH: /${{ github.event.repository.name }}/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: app/dist
+
+  deploy:
+    if: github.event_name == 'workflow_dispatch'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
