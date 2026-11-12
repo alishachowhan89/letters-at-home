@@ -9,7 +9,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Toolchain and deployment: Vue SFC build, language, GitHub Pages
 
 - **Date**: 2026-11-12
-- **Iteration**: 2
+- **Iteration**: 3
 - **Status**: Partially Implemented
 - **Deciders**: Alisha Chowhan (human), Lexeme 5.5 (Claude Opus 5.5)
 
@@ -73,14 +73,14 @@ Vue, scoped CSS and GitHub Pages were given in the brief. QST-STACK (answered B)
 
 ### Chosen
 - **Stack — B**: Vite + Vue 3 + TypeScript, scaffolded with `create-vue` 3.24.0 (`--ts --vitest`). The gate now includes Vitest, `vue-tsc` and `vite build`.
-- **Name — B**: an original name, with the repo renamed before the first deploy. **The name itself was not given**, so it's asked as QST-GAME-NAME below. Until then the page uses the working title "CS Word Guess".
+- **Name — B**: an original name, with the repo renamed before the first deploy. The name was then chosen in QST-GAME-NAME: **C, Five Bytes**. The repo will be `five-bytes`, so the site will be at `https://alishachowhan89.github.io/five-bytes/`.
 
 **Trade-offs accepted**: TypeScript syntax in every file. Deploy is held back until the rename.
 
 ### Consequences
 - **The app lives in `app/`, not the repo root.** I chose this while implementing: the scaffolder's `README.md`, `.gitignore` and `.vscode/` would have collided with the template's, and the subfolder keeps the game separate from the records. CI and the gate both run with `app/` as their working directory.
 - **Base path comes from the repo name.** `vite.config.ts` reads `BASE_PATH`, and the workflow sets it to `/${{ github.event.repository.name }}/`. Renaming the repo therefore needs no code change, so B's "more work later" cost mostly disappears. Verified: a build with `BASE_PATH=/some-repo/` prefixes every asset and the favicon.
-- **The workflow (`.github/workflows/pages.yml`) tests and builds on every push, but deploys only when run by hand** until QST-GAME-NAME is answered and the repo renamed.
+- **The workflow (`.github/workflows/pages.yml`) tests and builds on every push. Its deploy job runs only when `github.event.repository.name == 'five-bytes'`** (changed in iteration 3; it used to be manual-only). The "rename before the first deploy" ruling is now built into the workflow: under the old name nothing can be published, and after the rename the next push deploys with no further edits.
 - **The repo is public** (checked with `gh repo view`), so Pages is free. That resolves the open item below.
 - **Toolchain friction on this machine.** Node 22.14 is older than the scaffold needs (22.18+). npm 11.3.0 crashes while installing (`Cannot read properties of null (reading 'edgesOut')`, in arborist's peer-dependency code), so the install was done with npm 12.2.2 through npx. jsdom 30 won't load on Node 22.14, so tests run in the `node` environment. Details are in `docs/TECHNICAL-DEBT.md`. CI uses Node 24.
 - **Scoped CSS as planned**: one global `app/src/assets/tokens.css` (custom properties and a reset only); everything else is `<style scoped>`.
@@ -140,7 +140,9 @@ C — Five Bytes. Rationale: It says what the game is (five letters) in CS terms
 - [x] Add the GitHub Actions Pages workflow (deploy runs only when triggered by hand for now) - Owner: Lexeme 5.5
 - [ ] Turn on Pages: Settings → Pages → Source: GitHub Actions - Owner: Alisha Chowhan
 - [x] Answer QST-PRODUCT-NAME (B) - Owner: Alisha Chowhan
-- [ ] Answer QST-GAME-NAME, rename the repo on GitHub, update `GAME_TITLE` and `<title>`, then remove the `if:` on the deploy job - Owner: Alisha Chowhan (name, rename), Lexeme 5.5 (code)
+- [x] Answer QST-GAME-NAME (C — Five Bytes) - Owner: Alisha Chowhan
+- [x] Update `GAME_TITLE` and `<title>`; make the deploy job depend on the repo name - Owner: Lexeme 5.5
+- [ ] Rename the GitHub repo to `five-bytes`, update the local `origin` URL, push - Owner: Alisha Chowhan (or Lexeme 5.5 with her go-ahead)
 
 ---
 
@@ -167,6 +169,12 @@ C — Five Bytes. Rationale: It says what the game is (five letters) in CS terms
 - Contributors: Alisha Chowhan (answers), Lexeme 5.5 (Claude Opus 5.5; implementation, this entry)
 - Changes: Scaffolded `app/` and wrote the Decision section. Recorded the `app/` subfolder and base-path-from-repo-name choices, and the local Node/npm/jsdom problems. Added the Pages workflow with deploy held back. Added QST-GAME-NAME because answer B asked for a name but didn't give one. Marked repo visibility as verified.
 - Outcome: Draft → Partially Implemented (deploy waits on QST-GAME-NAME and the repo rename)
+
+### Iteration 3 (2026-11-12)
+- Trigger: Alisha answered QST-GAME-NAME (C — Five Bytes)
+- Contributors: Alisha Chowhan (answer), Lexeme 5.5 (Claude Opus 5.5; implementation, this entry)
+- Changes: Renamed the game to Five Bytes in the title, header and storage-key prefix (`five-bytes:daily:<day>`; nothing had been saved under the old prefix, since nothing was deployed). The deploy job now depends on the repo name instead of being manual-only.
+- Outcome: still Partially Implemented. What's left is the repo rename, enabling Pages and pushing, all of which change things on GitHub.
 
 ---
 

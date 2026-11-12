@@ -9,8 +9,8 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Game rules: valid guesses and puzzle cadence
 
 - **Date**: 2026-11-12
-- **Iteration**: 2
-- **Status**: Partially Implemented
+- **Iteration**: 3
+- **Status**: Implemented
 - **Deciders**: Alisha Chowhan (human), Lexeme 5.5 (Claude Opus 5.5)
 
 **TL;DR**: Before writing code, decide what counts as a legal guess and whether there is one shared puzzle per day or unlimited play. Both choices shape the word-list files, the game state, and what gets saved in the browser.
@@ -113,19 +113,19 @@ Answers are CS terms; the open choices were what a player may type and when a ne
 - [x] Unverified assumption: the five-letter CS-term count (~150–250) was a guess. **Measured: 128** in the first draft list (see Decision → Consequences).
 - [ ] Concern: feedback shown by **color alone** fails for color-blind players. *Partly done*: every tile has a spoken label ("A, correct spot") and the palette uses teal and amber, which differ in brightness as well as hue. Still open: a high-contrast option.
 - [ ] Future task: decide who curates the answer list and how disputed terms are handled. (Is "LINUX" a CS word? "AGILE"? Only words that are fair to a CS student?) The draft avoids plurals and proper nouns. **Alisha to review `app/src/game/words/answers.ts`**, which also includes some words that are as much everyday as CS, such as LOGIN, VIRUS, MODEL and CLOUD.
-- [ ] Future task: **the reveal should teach the term.** The accepted rationale for QST-VALID-GUESSES says "the reveal teaches the term", but today the end screen shows only the word. Add a one-line definition for each answer.
-- [ ] Future task: practice mode (random answer, never today's word, not saved), which completes cadence C.
+- [x] Future task: **the reveal should teach the term.** Done in iteration 3: each answer has a one-line definition in `app/src/game/words/definitions.ts`, shown when a round ends. A test fails if an answer has no definition. The definitions are a draft for Alisha to review along with the list.
+- [x] Future task: practice mode (random answer, never today's word, not saved), which completes cadence C. Done in iteration 3. The two modes live side by side, so switching never loses either board.
 
 ---
 
 ## Action Items
 
 - [x] Draft the five-letter CS answer list and count it (128) - Owner: Lexeme 5.5
-- [ ] Curate the answer list (keep / cut / add, append-only) - Owner: Alisha Chowhan
+- [ ] Curate the answer list and its definitions (keep / cut / add, append-only) - Owner: Alisha Chowhan
 - [x] Pick an English word list and check its license (ENABLE, public domain) - Owner: Lexeme 5.5
 - [x] Write the repeated-letter feedback tests (QUEUE/EERIE, TOKEN/EMBED, ARRAY/RADIX) - Owner: Lexeme 5.5
-- [ ] Practice mode - Owner: Lexeme 5.5
-- [ ] One-line definitions shown on the reveal - Owner: Lexeme 5.5 (draft), Alisha Chowhan (review)
+- [x] Practice mode - Owner: Lexeme 5.5
+- [x] One-line definitions shown on the reveal (draft) - Owner: Lexeme 5.5
 
 ---
 
@@ -152,6 +152,12 @@ Answers are CS terms; the open choices were what a player may type and when a ne
 - Contributors: Alisha Chowhan (answers), Lexeme 5.5 (Claude Opus 5.5; implementation, this entry)
 - Changes: Filled in the Decision section. Built the scoring function, the guess check (ENABLE plus the answers), the daily schedule with saved progress, and 28 tests. Measured the list at 128 words. Recorded the append-only schedule rule. Added follow-ups for the definitions on the reveal and for practice mode.
 - Outcome: Draft → Partially Implemented (daily mode built; practice mode and list curation remain)
+
+### Iteration 3 (2026-11-12)
+- Trigger: "proceed" after QST-GAME-NAME was answered; practice mode and the definitions were the next items on my side
+- Contributors: Lexeme 5.5 (Claude Opus 5.5)
+- Changes: Added practice mode (`app/src/game/practice.ts`: never today's word, never the previous practice word). Added a one-line definition for all 128 answers, shown when a round ends. Made the game composable take any answer (`useWordGame`, saving optional). 5 new tests, 33 in total.
+- Outcome: Partially Implemented → Implemented (both decisions are built; curating the list and a high-contrast option stay open as follow-ups)
 
 ---
 

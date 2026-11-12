@@ -1,6 +1,6 @@
 # Crew Onboarding — read this first if you've been recruited
 
-Welcome to **wordle-with-records**, a word-guessing browser game whose answers are computer-science terms (Vue + GitHub Pages), built by Alisha Chowhan with Claude.
+Welcome to **Five Bytes**, a word-guessing browser game whose answers are computer-science terms (Vue + GitHub Pages), built by Alisha Chowhan with Claude.
 
 This document captures **80% of what every seat needs to know** so per-recruit
 briefs can be short deltas (name, color, mission). Fill the bracketed
