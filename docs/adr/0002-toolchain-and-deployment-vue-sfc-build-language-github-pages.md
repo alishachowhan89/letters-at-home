@@ -109,7 +109,7 @@ B — Original name, rename the repo. Rationale: The URL is the most-shared part
 ---
 
 ### QST-GAME-NAME: What's the game's name? (QST-PRODUCT-NAME chose "original name + rename"; this picks the name)
-- Status: unanswered
+- Status: answered
 - Why asking: QST-PRODUCT-NAME was answered B: give the game an original name and rename the repo to match before the first deploy. The name itself wasn't given. The name appears in three places: the page title (`app/index.html`), the header (`GAME_TITLE` in `app/src/App.vue`), and the repo name, which becomes the URL `https://alishachowhan89.github.io/<name>/`. A short, lowercase-friendly name works best in that URL. Deploy is held back until this is answered.
 - Need: pick a letter, or write your own name (an answer in any shape is complete)
 
@@ -124,7 +124,7 @@ Options:
 **C — Five Bytes.** *Rationale*: It says what the game is (five letters) in CS terms and can't be confused with a library, unlike A. B is a nice pun, but it says nothing about guessing a five-letter word. *Confidence*: 0.4 — because a name is taste, and the project is yours. My lean is only a starting point, so please pick. *If wrong*: if you want the name to carry the "every answer is a CS term" idea over the five-letter idea, choose **A** or your own (**D**).
 
 **ANS:** (by Alisha Chowhan)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+C — Five Bytes. Rationale: It says what the game is (five letters) in CS terms and can't be confused with a library, unlike A. B is a nice pun, but it says nothing about guessing a five-letter word. Confidence: 0.4 — because a name is taste, and the project is yours. My lean is only a starting point, so please pick. If wrong: if you want the name to carry the "every answer is a CS term" idea over the five-letter idea, choose A or your own (D).
 
 ---
 
