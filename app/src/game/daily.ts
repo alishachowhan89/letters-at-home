@@ -26,7 +26,7 @@ export function dayNumber(now: Date): number {
  * against the new one.
  */
 export function dailyStorageKey(day: number, answer: string): string {
-  return `five-bytes:daily:${day}:${answer}`
+  return `letters-at-home:daily:${day}:${answer}`
 }
 
 /** The daily answer for a given day number; wraps after the list runs out. */

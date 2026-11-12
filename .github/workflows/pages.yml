@@ -3,11 +3,10 @@
 # Every push to main runs the tests and the production build — a red X on a
 # commit means the gate failed in CI too.
 #
-# DEPLOY happens only once the repo is named `five-bytes`: QST-PRODUCT-NAME
-# was answered "rename the repo before the first deploy", and QST-GAME-NAME
-# chose Five Bytes (ADR-0002). Under the old name the job is skipped, so
-# nothing is ever published at /wordle-with-records/. After the rename, every
-# push to main (or a manual run) deploys.
+# DEPLOY runs only while the repo is named `letters-at-home` (ADR-0003
+# QST-REPO-NAME; previously `five-bytes`, ADR-0002). The check keeps the site
+# from being published under a stale name. IF THE REPO IS EVER RENAMED AGAIN,
+# update this name too, or deploys are silently skipped (the build job stays green).
 #
 # One-time repo setting: Settings → Pages → Build and deployment → Source: GitHub Actions.
 
@@ -52,7 +51,7 @@ jobs:
           path: app/dist
 
   deploy:
-    if: github.event.repository.name == 'five-bytes'
+    if: github.event.repository.name == 'letters-at-home'
     needs: build
     runs-on: ubuntu-latest
     environment:
