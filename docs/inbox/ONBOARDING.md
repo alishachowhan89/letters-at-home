@@ -1,6 +1,6 @@
 # Crew Onboarding — read this first if you've been recruited
 
-Welcome to **Five Bytes**, a word-guessing browser game whose answers are computer-science terms (Vue + GitHub Pages), built by Alisha Chowhan with Claude.
+Welcome to **Letters at Home**, a daily five-letter word-guessing browser game (Vue + GitHub Pages), built by Alisha Chowhan with Claude.
 
 This document captures **80% of what every seat needs to know** so per-recruit
 briefs can be short deltas (name, color, mission). Fill the bracketed
@@ -59,7 +59,7 @@ the tmux hive.
 
 ## 1. What this project is
 
-A browser word-guessing game: you guess a hidden five-letter word and get colored feedback for each letter. The twist is that every answer is a computer-science term (ARRAY, STACK, QUEUE, CACHE, TOKEN…). It's built with Vue single-file components using scoped CSS, so styles stay inside each component, and it's hosted free as a static site on GitHub Pages. This repo holds both the game and its decision records; implementation happens here.
+A browser word-guessing game: you guess a hidden five-letter everyday English word and get colored feedback for each letter, with a shared daily puzzle and unlimited practice. (Answers were originally computer-science terms; ADR-0003 switched to everyday words.) It's built with Vue single-file components using scoped CSS, so styles stay inside each component, and it's hosted free as a static site on GitHub Pages. This repo holds both the game and its decision records; implementation happens here.
 
 **Read first**, in order:
 1. `CLAUDE.md` — directives, project context, workflow

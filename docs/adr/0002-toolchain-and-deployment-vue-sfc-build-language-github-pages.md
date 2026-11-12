@@ -9,8 +9,10 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Toolchain and deployment: Vue SFC build, language, GitHub Pages
 
 - **Date**: 2026-11-12
-- **Iteration**: 4
+- **Iteration**: 5
 - **Status**: Implemented
+
+> **Amended by [ADR-0003](0003-everyday-word-answers-and-the-letters-at-home-title.md) (2026-11-12):** the title is now **Letters at Home**, replacing Five Bytes. The repo and URL are still `five-bytes`; whether to rename is ADR-0003's QST-REPO-NAME.
 - **Deciders**: Alisha Chowhan (human), Lexeme 5.5 (Claude Opus 5.5)
 
 **TL;DR**: Scoped CSS means compiled Vue single-file components, so a build step is required. That leaves one open choice that affects every file, JavaScript or TypeScript, plus a deferred question about the product's public name to settle before the first deploy.
@@ -183,8 +185,15 @@ C — Five Bytes. Rationale: It says what the game is (five letters) in CS terms
 - Changes: Renamed the repo to `alishachowhan89/five-bytes` (`gh repo rename`, which also updated `origin`). Enabled Pages with `build_type=workflow`. Pushed 9 commits. Workflow run 43319393232: build (tests, type-check, build) and deploy both passed. Verified live: https://alishachowhan89.github.io/five-bytes/ returns 200 with `<title>Five Bytes</title>`, and both assets under `/five-bytes/assets/` return 200, which confirms the base path came from the repo name.
 - Outcome: Partially Implemented → Implemented
 
+### Iteration 5 (2026-11-12)
+- Trigger: Alisha asked to retitle the game "Wordle at Home"
+- Contributors: Alisha Chowhan (request, choice), Lexeme 5.5 (Claude Opus 5.5)
+- Changes: Declined the Wordle name (see ADR-0003); Alisha chose Letters at Home. Added the amendment banner at the top. Title and description updated in `app/index.html` and `App.vue`.
+- Outcome: still Implemented
+
 ---
 
 ## Links
 
 - Related ADRs: [ADR-0001](0001-game-rules-valid-guesses-and-puzzle-cadence.md) (game rules)
+- Amended by: [ADR-0003](0003-everyday-word-answers-and-the-letters-at-home-title.md) (title: Letters at Home)

@@ -9,8 +9,10 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Game rules: valid guesses and puzzle cadence
 
 - **Date**: 2026-11-12
-- **Iteration**: 3
+- **Iteration**: 4
 - **Status**: Implemented
+
+> **Amended by [ADR-0003](0003-everyday-word-answers-and-the-letters-at-home-title.md) (2026-11-12):** answers are now everyday English words, not CS terms, and the definitions on the reveal are removed. The guess rules, cadence, schedule and tests below still apply.
 - **Deciders**: Alisha Chowhan (human), Lexeme 5.5 (Claude Opus 5.5)
 
 **TL;DR**: Before writing code, decide what counts as a legal guess and whether there is one shared puzzle per day or unlimited play. Both choices shape the word-list files, the game state, and what gets saved in the browser.
@@ -159,6 +161,12 @@ Answers are CS terms; the open choices were what a player may type and when a ne
 - Changes: Added practice mode (`app/src/game/practice.ts`: never today's word, never the previous practice word). Added a one-line definition for all 128 answers, shown when a round ends. Made the game composable take any answer (`useWordGame`, saving optional). 5 new tests, 33 in total.
 - Outcome: Partially Implemented → Implemented (both decisions are built; curating the list and a high-contrast option stay open as follow-ups)
 
+### Iteration 4 (2026-11-12)
+- Trigger: Alisha asked for everyday words instead of CS terms. Recorded as ADR-0003.
+- Contributors: Alisha Chowhan (request, choices), Lexeme 5.5 (Claude Opus 5.5)
+- Changes: Added the amendment banner at the top. The 128-word CS list and its definitions are replaced by 593 everyday words. The answer-list curation action item now refers to the new list. Saved progress is now keyed by day and answer (ADR-0003).
+- Outcome: still Implemented
+
 ---
 
 ## Glossary (optional)
@@ -172,3 +180,4 @@ Answers are CS terms; the open choices were what a player may type and when a ne
 ## Links
 
 - Related ADRs: [ADR-0002](0002-toolchain-and-deployment-vue-sfc-build-language-github-pages.md) (toolchain, deploy, product name)
+- Amended by: [ADR-0003](0003-everyday-word-answers-and-the-letters-at-home-title.md) (everyday-word answers)
